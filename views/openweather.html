@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>6_이동휘</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style>
+        * {
+            margin: 0; padding: 0;
+            box-sizing: border-box;
+        }
+
+        *::selection {
+            background-color: #36363600;
+        }
+
+        body {
+            background-color: #000000;
+            display: flex;
+            padding: 8px;
+            height: 100vh;
+        }
+
+        aside {
+            min-width: 300px; width: 20%;
+            height: 100%;
+            margin-right: 8px;
+        }
+
+        aside > header {
+            width: 100%; height: 13%;
+            background-color: #181818;
+            margin-bottom: 8px;
+            border: none; border-radius: 8px;
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        aside > .side_box {
+            width: 100%; height: 87%;
+            background-color: #181818;
+            border: none; border-radius: 8px;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        aside > .side_box #flag {
+            width: 100%; height: 250px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+        }
+
+        aside > .side_box .location {
+            width: 100%;
+            margin-bottom: 30px;
+        }
+
+        .location > p {
+            color: #fff;
+            font-size: 15pt;
+        }
+
+        aside > .side_box .detail_temp {
+            width: 100%;
+            margin-bottom: 30px;
+        }
+
+        .detail_temp p{
+            color: #fff;
+            font-size: 12pt;
+            margin: 3px;
+        }
+
+        aside > .side_box .detail_wind {
+            width: 100%;
+            margin-bottom: 30px;
+        }
+
+        .detail_wind p {
+            color: #fff;
+            font-size: 12pt;
+            margin: 3px;
+        }
+
+        aside > .side_box .sun {
+            width: 100%;
+            margin-bottom: 30px;
+        }
+
+        .sun > p {
+            color: #fff;
+            font-size: 12pt;
+            margin: 3px;
+        }
+
+        .side_box > .reserved_box {
+            margin-bottom: 30px;
+        }
+
+        .side_box > .reserved_box p{
+            color: #fff;
+            font-size: 8pt;
+            margin: 3px;
+        }
+
+        main {
+            width: -webkit-calc(100% - 300px); height: 100%;
+        }
+
+        main > section {
+            width: 100%; height: 70%;
+            margin-bottom: 8px;
+        }
+
+        main > nav {
+            width: 100%; height: 30%;
+            background-color: #181818;
+            border: none; border-radius: 8px;
+        }
+
+        main > section > img { 
+            width: 100%; height: 100%;
+            border: none; border-radius: 8px;
+            background-color: #181818;
+        }
+
+        main > section > .info_box {
+            width: 100%; height: 100.3%;
+            border: none; border-radius: 8px;
+            background-color: rgba(40, 38, 38, 0.418);
+            transform: translate(0, -100.3%);
+            display: flex; position: relative;
+        }
+
+        .info_box > .info {
+            display: flex; flex-direction: column;
+            position: absolute;
+            top: 25%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            align-items: center;
+        }
+
+        .info_box > .info > .city_box {
+            display: flex;
+            width: 300px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .city_box #city_text {
+            color: #fff;
+            font-size: 35pt;
+            font-weight: bold;
+        }
+
+        .city_box #weatherImg {
+            width: 80px; height: 80px;
+        }
+
+        .info_box > .info > .temp_box {
+            width: 300px;
+            display: flex;
+            justify-content: center;
+            position: relative;
+        }
+
+        .temp_box p {
+            position: absolute;
+            top: -35px;
+            font-size: 65pt;
+            color: #fff;
+        }
+
+        .info_box > .info > .all_temp {
+            width: 320px;
+            position: absolute;
+            top: 150px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .all_temp p {
+            color: #fff;
+            font-size: 11pt;
+            padding: 4px 10px;
+            background-color: #181818b9;
+            border: none; border-radius: 20px;
+        }
+
+        main > nav {
+            overflow-y: scroll;
+        }
+
+        main > nav::-webkit-scrollbar {
+            width: 15px;
+            background-color: #181818;
+            margin: 3px;
+        }
+
+        main > nav::-webkit-scrollbar-thumb {
+            background-color: #363636;
+            border-radius: 3px;
+            width: 10px;
+        }
+
+        main > nav > .input {
+            display: flex;
+            justify-content: center;
+            margin: 8px;
+        }
+
+        main > nav > .input > input {
+            width: 350px; height: 30px;
+            border: none; border-radius: 8px;
+            background-color: #363636;
+            padding: 5px; color: #fff;
+        }
+
+        main > nav > .container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, 380px);
+            gap: 15px;
+            padding: 20px;
+        }
+
+        nav > .container > .item {
+            height: 240px;
+            border: none; border-radius: 8px;
+            background-color: #202020;
+        }
+
+        nav > .container > .item > img {
+            width: 100%; height: 100%;
+            border: none; border-radius: 8px;
+        }
+
+        .item p {
+            width: 100%; height: 100%;
+            background-color: rgba(40, 38, 38, 0.694);
+            transform: translate(0, -101.7%);
+            border: none; border-radius: 8px;
+            color: #fff;
+            font-size: 20pt;
+            font-weight: bold;
+            cursor: pointer;
+            text-align: center;
+            line-height: 240px;
+        }
+
+        .item > p:hover {
+            background-color: rgba(40, 38, 38, 0.338);
+        }
+    </style>
+</head>
+<body>
+    <aside>
+        <header>
+            <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" viewBox="0.000008711181180842686 2.7222441190133395e-7 282.593505859375 147" overflow="visible"><defs id="SvgjsDefs2079"></defs><g id="SvgjsG2080" transform="scale(0.5708959571245485)" opacity="1"><g id="SvgjsG2081" class="UHK6U2u5P" transform="translate(148.5, -9.9) scale(1.98)" light-content="false" non-strokable="false" fill="#ffffff"><path d="M17.719 5L5 17.719V82.28L17.719 95h64.563L95 82.281V17.72L82.282 5zm1.5 3.125h61.563l11.093 11.094V80.78L80.782 91.875H19.219L8.125 80.781V19.22z"></path></g><g id="SvgjsG2082" class="text" transform="translate(248.75899877929686, 112.78299862670897) scale(1)" light-content="false" fill="#ffffff"><path d="M-38.3 0.82L-28.29 -22.24L-18.27 0.82L2.71 -47.25L1.01 -47.25L-18.08 -3.78L-27.03 -24.51L-17.2 -47.25L-18.96 -47.25L-27.97 -26.52L-36.73 -47.25L-39 -47.25L-29.23 -24.44L-37.99 -3.97L-56.7 -47.25L-59.03 -47.25Z M9.2 -47.25L9.2 0L11.28 0L11.28 -47.25Z M44.04 0.69C48.53 0.69 52.69 -0.48 56.51 -2.83L56.51 -5.17C52.56 -2.48 48.3 -1.13 43.72 -1.13C37.55 -1.13 32.26 -3.36 27.85 -7.81C23.44 -12.26 21.23 -17.59 21.23 -23.78C21.23 -29.98 23.44 -35.29 27.85 -39.72C32.26 -44.15 37.55 -46.37 43.72 -46.37C48.3 -46.37 52.56 -45.02 56.51 -42.34L56.51 -44.67C52.48 -47.02 48.22 -48.19 43.72 -48.19C37 -48.19 31.23 -45.79 26.4 -40.98C21.57 -36.17 19.15 -30.43 19.15 -23.75C19.15 -19.51 20.23 -15.51 22.4 -11.75C24.56 -7.99 27.51 -4.98 31.25 -2.71C34.99 -0.44 39.02 0.69 43.34 0.69Z"></path></g><g id="SvgjsG2083" class="text" transform="translate(248.10000610351562, 226.4599983215332) scale(1)" light-content="false" fill="#ffffff"><path d="M-234.66 0.24L-232.74 0.24L-223.02 -25.5L-222.66 -25.5L-213.06 0.24L-211.14 0.24L-201.72 -31.02L-198.18 -32.4L-198.18 -33.6L-209.4 -33.6L-209.4 -32.4L-204.9 -30.96L-211.38 -8.04L-211.62 -8.04L-221.04 -33.84L-222.84 -33.84L-232.44 -8.1L-232.74 -8.1L-239.52 -31.02L-235.02 -32.4L-235.02 -33.6L-248.1 -33.6L-248.1 -32.4L-244.2 -31.08Z M-193.38 0L-167.16 0L-167.16 -9.18L-168.18 -9.18L-170.82 -2.58L-184.86 -2.58L-184.86 -16.14L-175.62 -16.14L-174.06 -12.06L-173.04 -12.06L-173.04 -22.8L-174.06 -22.8L-175.62 -18.66L-184.86 -18.66L-184.86 -31.02L-172.2 -31.02L-169.68 -25.2L-168.6 -25.2L-168.6 -33.6L-193.38 -33.6L-193.38 -32.4L-189.18 -30.9L-189.18 -2.7L-193.38 -1.2Z M-160.98 0L-150.36 0L-150.36 -1.2L-154.86 -2.4L-150.9 -12.12L-138.18 -12.12L-134.16 -2.46L-138.48 -1.2L-138.48 0L-126.18 0L-126.18 -1.2L-129.54 -2.52L-142.74 -33.9L-144.72 -33.9L-158.04 -2.34L-160.98 -1.2ZM-149.88 -14.64L-144.6 -27.66L-139.2 -14.64Z M-115.62 0L-100.68 0L-100.68 -1.2L-106.02 -2.7L-106.02 -31.02L-96.48 -31.02L-93.78 -23.88L-92.7 -23.88L-92.7 -33.6L-123.54 -33.6L-123.54 -23.88L-122.46 -23.88L-119.82 -31.02L-110.34 -31.02L-110.34 -2.7L-115.62 -1.2Z M-86.1 0L-73.14 0L-73.14 -1.2L-77.58 -2.7L-77.58 -16.08L-58.92 -16.08L-58.92 -2.7L-63.42 -1.2L-63.42 0L-50.52 0L-50.52 -1.2L-54.66 -2.7L-54.66 -30.9L-50.52 -32.4L-50.52 -33.6L-63.42 -33.6L-63.42 -32.4L-58.92 -30.9L-58.92 -18.66L-77.58 -18.66L-77.58 -30.9L-73.14 -32.4L-73.14 -33.6L-86.1 -33.6L-86.1 -32.4L-81.9 -30.9L-81.9 -2.7L-86.1 -1.2Z M-42.72 0L-16.5 0L-16.5 -9.18L-17.52 -9.18L-20.16 -2.58L-34.2 -2.58L-34.2 -16.14L-24.96 -16.14L-23.4 -12.06L-22.38 -12.06L-22.38 -22.8L-23.4 -22.8L-24.96 -18.66L-34.2 -18.66L-34.2 -31.02L-21.54 -31.02L-19.02 -25.2L-17.94 -25.2L-17.94 -33.6L-42.72 -33.6L-42.72 -32.4L-38.52 -30.9L-38.52 -2.7L-42.72 -1.2Z M-8.4 0L4.08 0L4.08 -1.2L0.12 -2.76L0.12 -15.6L4.38 -15.6L14.4 0L21.9 0L21.9 -1.2L18.18 -2.52L8.64 -16.8C10.8 -17.56 12.51 -18.64 13.77 -20.04C15.03 -21.44 15.66 -23.16 15.66 -25.2C15.66 -27.76 14.6 -29.8 12.48 -31.32C10.36 -32.84 7.44 -33.6 3.72 -33.6L-8.4 -33.6L-8.4 -32.4L-4.14 -30.9L-4.14 -2.7L-8.4 -1.2ZM3.42 -31.02C5.86 -31.02 7.74 -30.46 9.06 -29.34C10.38 -28.22 11.04 -26.62 11.04 -24.54C11.04 -22.62 10.38 -21.08 9.06 -19.92C7.74 -18.76 5.96 -18.18 3.72 -18.18L0.12 -18.18L0.12 -31.02Z M40.86 0L53.16 0L53.16 -1.2L49.14 -2.7L49.14 -30.9L53.16 -32.4L53.16 -33.6L40.86 -33.6L40.86 -32.4L44.82 -30.9L44.82 -2.7L40.86 -1.2Z M61.08 0L73.14 0L73.14 -1.2L68.1 -2.88L68.1 -27.48L90.36 0.24L92.28 0.24L92.28 -30.96L96.42 -32.4L96.42 -33.6L84.6 -33.6L84.6 -32.4L89.4 -30.96L89.4 -7.8L68.94 -33.6L61.08 -33.6L61.08 -32.4L65.28 -30.96L65.28 -2.7L61.08 -1.2Z M136.98 0.6C139.62 0.6 141.8 0.36 143.52 -0.12C145.24 -0.6 146.84 -1.22 148.32 -1.98L148.8 -9.72L147.72 -9.72L144.18 -3.48C142.42 -2.44 140.2 -1.92 137.52 -1.92C134.76 -1.92 132.33 -2.54 130.23 -3.78C128.13 -5.02 126.5 -6.8 125.34 -9.12C124.18 -11.44 123.6 -14.22 123.6 -17.46C123.6 -20.06 124.18 -22.44 125.34 -24.6C126.5 -26.76 128.11 -28.47 130.17 -29.73C132.23 -30.99 134.62 -31.62 137.34 -31.62C138.62 -31.62 139.82 -31.45 140.94 -31.11C142.06 -30.77 143.2 -30.2 144.36 -29.4L147.18 -23.58L148.2 -23.58L148.02 -31.74C146.58 -32.42 145.11 -33.01 143.61 -33.51C142.11 -34.01 140.1 -34.26 137.58 -34.26C135.1 -34.26 132.77 -33.8 130.59 -32.88C128.41 -31.96 126.47 -30.68 124.77 -29.04C123.07 -27.4 121.74 -25.47 120.78 -23.25C119.82 -21.03 119.34 -18.6 119.34 -15.96C119.34 -12.76 120.1 -9.91 121.62 -7.41C123.14 -4.91 125.22 -2.95 127.86 -1.53C130.5 -0.11 133.54 0.6 136.98 0.6Z M158.52 0L170.82 0L170.82 -1.2L166.8 -2.7L166.8 -30.9L170.82 -32.4L170.82 -33.6L158.52 -33.6L158.52 -32.4L162.48 -30.9L162.48 -2.7L158.52 -1.2Z M185.64 0L200.58 0L200.58 -1.2L195.24 -2.7L195.24 -31.02L204.78 -31.02L207.48 -23.88L208.56 -23.88L208.56 -33.6L177.72 -33.6L177.72 -23.88L178.8 -23.88L181.44 -31.02L190.92 -31.02L190.92 -2.7L185.64 -1.2Z M223.5 0L237.18 0L237.18 -1.2L232.5 -2.7L232.5 -15.78L243.18 -31.02L246.9 -32.4L246.9 -33.6L235.86 -33.6L235.86 -32.4L239.58 -30.96L239.58 -30.78L231.36 -18.54L222.24 -30.84L222.24 -31.08L225.78 -32.4L225.78 -33.6L213.36 -33.6L213.36 -32.4L217.2 -30.96L228.18 -15.96L228.18 -2.7L223.5 -1.2Z"></path></g><g id="SvgjsG2084" class="text" transform="translate(248.31999908447267, 257.1899991607666) scale(1)" light-content="false" fill="#ffffff"><path d="M-98.74 0.12L-97.78 0.12L-92.92 -12.75L-92.74 -12.75L-87.94 0.12L-86.98 0.12L-82.27 -15.51L-80.5 -16.2L-80.5 -16.8L-86.11 -16.8L-86.11 -16.2L-83.86 -15.48L-87.1 -4.02L-87.22 -4.02L-91.93 -16.92L-92.83 -16.92L-97.63 -4.05L-97.78 -4.05L-101.17 -15.51L-98.92 -16.2L-98.92 -16.8L-105.46 -16.8L-105.46 -16.2L-103.51 -15.54Z M-78.1 0L-64.99 0L-64.99 -4.59L-65.5 -4.59L-66.82 -1.29L-73.84 -1.29L-73.84 -8.07L-69.22 -8.07L-68.44 -6.03L-67.93 -6.03L-67.93 -11.4L-68.44 -11.4L-69.22 -9.33L-73.84 -9.33L-73.84 -15.51L-67.51 -15.51L-66.25 -12.6L-65.71 -12.6L-65.71 -16.8L-78.1 -16.8L-78.1 -16.2L-76 -15.45L-76 -1.35L-78.1 -0.6Z M-61.9 0L-56.59 0L-56.59 -0.6L-58.84 -1.2L-56.86 -6.06L-50.5 -6.06L-48.49 -1.23L-50.65 -0.6L-50.65 0L-44.5 0L-44.5 -0.6L-46.18 -1.26L-52.78 -16.95L-53.77 -16.95L-60.43 -1.17L-61.9 -0.6ZM-56.35 -7.32L-53.71 -13.83L-51.01 -7.32Z M-39.22 0L-31.76 0L-31.76 -0.6L-34.43 -1.35L-34.43 -15.51L-29.65 -15.51L-28.3 -11.94L-27.76 -11.94L-27.76 -16.8L-43.18 -16.8L-43.18 -11.94L-42.64 -11.94L-41.32 -15.51L-36.58 -15.51L-36.58 -1.35L-39.22 -0.6Z M-24.46 0L-17.98 0L-17.98 -0.6L-20.2 -1.35L-20.2 -8.04L-10.87 -8.04L-10.87 -1.35L-13.12 -0.6L-13.12 0L-6.68 0L-6.68 -0.6L-8.75 -1.35L-8.75 -15.45L-6.68 -16.2L-6.68 -16.8L-13.12 -16.8L-13.12 -16.2L-10.87 -15.45L-10.87 -9.33L-20.2 -9.33L-20.2 -15.45L-17.98 -16.2L-17.98 -16.8L-24.46 -16.8L-24.46 -16.2L-22.36 -15.45L-22.36 -1.35L-24.46 -0.6Z M-2.77 0L10.34 0L10.34 -4.59L9.82 -4.59L8.5 -1.29L1.49 -1.29L1.49 -8.07L6.11 -8.07L6.89 -6.03L7.4 -6.03L7.4 -11.4L6.89 -11.4L6.11 -9.33L1.49 -9.33L1.49 -15.51L7.82 -15.51L9.07 -12.6L9.62 -12.6L9.62 -16.8L-2.77 -16.8L-2.77 -16.2L-0.68 -15.45L-0.68 -1.35L-2.77 -0.6Z M14.39 0L20.63 0L20.63 -0.6L18.65 -1.38L18.65 -7.8L20.78 -7.8L25.79 0L29.54 0L29.54 -0.6L27.68 -1.26L22.91 -8.4C23.99 -8.78 24.84 -9.32 25.47 -10.02C26.1 -10.72 26.42 -11.58 26.42 -12.6C26.42 -13.88 25.89 -14.9 24.83 -15.66C23.76 -16.42 22.31 -16.8 20.45 -16.8L14.39 -16.8L14.39 -16.2L16.52 -15.45L16.52 -1.35L14.39 -0.6ZM20.3 -15.51C21.51 -15.51 22.46 -15.23 23.12 -14.67C23.78 -14.11 24.11 -13.31 24.11 -12.27C24.11 -11.31 23.78 -10.54 23.12 -9.96C22.46 -9.38 21.57 -9.09 20.45 -9.09L18.65 -9.09L18.65 -15.51Z M39.01 0L45.17 0L45.17 -0.6L43.15 -1.35L43.15 -15.45L45.17 -16.2L45.17 -16.8L39.01 -16.8L39.01 -16.2L41 -15.45L41 -1.35L39.01 -0.6Z M49.13 0L55.16 0L55.16 -0.6L52.64 -1.44L52.64 -13.74L63.77 0.12L64.72 0.12L64.72 -15.48L66.8 -16.2L66.8 -16.8L60.89 -16.8L60.89 -16.2L63.29 -15.48L63.29 -3.9L53.06 -16.8L49.13 -16.8L49.13 -16.2L51.22 -15.48L51.22 -1.35L49.13 -0.6Z M70.43 0L77.18 0L77.18 -0.6L74.71 -1.35L74.71 -8.07L79.33 -8.07L80.08 -6.03L80.6 -6.03L80.6 -11.4L80.08 -11.4L79.33 -9.33L74.71 -9.33L74.71 -15.48L81.04 -15.48L82.24 -12.6L82.82 -12.6L82.82 -16.8L70.46 -16.8L70.46 -16.2L72.55 -15.45L72.55 -1.35L70.43 -0.6Z M95.39 0.3C97.01 0.3 98.45 -0.07 99.72 -0.82C100.99 -1.57 101.99 -2.6 102.72 -3.91C103.45 -5.23 103.82 -6.72 103.82 -8.4C103.82 -10.08 103.45 -11.58 102.72 -12.9C101.99 -14.22 100.99 -15.25 99.72 -16C98.45 -16.75 97.01 -17.13 95.39 -17.13C93.78 -17.13 92.35 -16.75 91.1 -16C89.84 -15.25 88.84 -14.22 88.11 -12.9C87.38 -11.58 87.01 -10.08 87.01 -8.4C87.01 -6.72 87.38 -5.23 88.11 -3.91C88.84 -2.6 89.84 -1.57 91.1 -0.82C92.35 -0.07 93.78 0.3 95.39 0.3ZM95.93 -1.02C94.62 -1.02 93.46 -1.36 92.45 -2.04C91.43 -2.72 90.62 -3.68 90.04 -4.92C89.47 -6.16 89.18 -7.6 89.18 -9.24C89.18 -11.24 89.71 -12.84 90.76 -14.04C91.82 -15.24 93.23 -15.84 94.96 -15.84C96.27 -15.84 97.41 -15.5 98.42 -14.82C99.42 -14.14 100.2 -13.18 100.77 -11.95C101.34 -10.72 101.62 -9.29 101.62 -7.65C101.62 -5.63 101.11 -4.02 100.08 -2.82C99.05 -1.62 97.67 -1.02 95.93 -1.02Z"></path></g></g></svg>
+        </header>
+
+        <div class="side_box">
+            <div class="side_info">
+                <img id="flag" src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Flag_of_the_United_Kingdom_%281-2%29.svg/383px-Flag_of_the_United_Kingdom_%281-2%29.svg.png" alt="">
+                
+                <div class="location">
+                    <p class="country_box">country <span id="country_text">영국</span></p>
+                    <p class="location_box">lon <span id="lon_text">-0.1257</span> lat <span id="lat_text">51.5085</span></p>
+                </div>
+                
+                <div class="detail_temp">
+                    <p class="temp_box">temp <span id="temp_text"></span>°C</p>
+                    <P class="feels_temp_box">feels_like <span id="feels_text"></span>°C</P>
+                    <p class="max_temp_box">max_temp <span id="max_temp_text"></span>°C</p>
+                    <p class="min_temp_box">min_temp <span id="min_temp_text"></span>°C</p>
+                    <p class="pressure_box">pressure <span id="pressure_text"></span>hPa</p>
+                    <p class="humidity_box">humidity <span id="humidity_text"></span>%</p>
+                </div>
+
+                <div class="detail_wind">
+                    <p class="widn_speed_box">wind_speed <span id="wind_speed_text"></span>m/s</p>
+                    <p class="wind_deg_box">wind_directiong <span id="wind_deg_text"></span></p>
+                </div>
+
+                <div class="sun">
+                    <p class="sunrise_box">sunrise <span id="sunrise_text"></span></p>
+                    <p class="sunset_box">sunset <span id="sunset_text"></span></p>
+                </div>
+            </div>
+            
+            <div class="reserved_box">
+                <p>본 사이트는 상업적 목적이 아닌 개인 포트폴리오로 제작되었습니다.</p>
+                <p>주소 | 서울특별시 종로구 종로58길 28</p>
+                <p>전화 | 02-2237-0465</p>
+                <p>학과 소개 | 교육과정 | 학과 생활 | 진로 안내 | 활동 영상</p>
+                <p>Copyright (c) 종로산업정보학교 AIcomputer Department 이동휘 All right reserved</p>
+            </div>
+        </div>
+    </aside>
+
+    <main>
+        <section>
+            <img id="main_city_img" src="https://media.cntraveller.com/photos/6343df288d5d266e2e66f082/16:9/w_2560%2Cc_limit/tokyoGettyImages-1031467664.jpeg">
+            
+            <div class="info_box">
+                <div class="info">
+                    <div class="city_box">
+                        <p id="city_text"></p>
+                        <img id="weatherImg" src="http://openweathermap.org/img/wn/04n@2x.png" alt="">
+                    </div>
+
+                    <div class="temp_box">
+                        <p><span id="main_temp_text"></span>°C</p>
+                    </div>
+
+                    <div class="all_temp">
+                        <p id="feels">Feel <span id="main_feels_text"></span>°C</p>
+                        <p id="Max">Max <span id="main_max_text"></span>°C</p>
+                        <p id="Min">Min <span id="main_min_text"></span>°C</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <nav>
+            <div class="input">
+                <input type="text" placeholder="city name">
+                <p></p>
+            </div>
+
+            <div class="container">
+                <div class="item">
+                    <img src="https://img.freepik.com/free-photo/seoul-cityscape-twilight-south-korea_335224-273.jpg" alt="seoul">
+                    <p>Seoul</p>
+                </div>
+
+                <div class="item">
+                    <img src="https://i.ytimg.com/vi/HL84zKbQDaM/maxresdefault.jpg">
+                    <p>Busan</p>
+                </div>
+
+                <div class="item">
+                    <img src="https://media.cntraveller.com/photos/6343df288d5d266e2e66f082/16:9/w_2560%2Cc_limit/tokyoGettyImages-1031467664.jpeg" alt="">
+                    <p>Tokyo</p>
+                </div>
+
+                <div class="item">
+                    <img src="https://www.nippon.com/en/ncommon/contents/guide-to-japan/2339170/2339170.jpg" alt="">
+                    <p>Osaka</p>
+                </div>
+
+                <div class="item">
+                    <img src="https://i.namu.wiki/i/mhrfwdvG183XHW_hF7maCS8UR3SeX8PZ8kpNBzbFhGEKrq9KrrF8Ehi1S3E-UeZh8ow23miBm9-jDC-3uOf4Og.webp" alt="">
+                    <p>New York</p>
+                </div>
+
+                <div class="item">
+                    <img src="https://assets.entrepreneur.com/content/3x2/2000/20150309170709-shutterstock-139999093.jpeg?format=pjeg&auto=webp&crop=16:9" alt="">
+                    <p>London</p>
+                </div>
+
+                <div class="item">
+                    <img src="https://cdn.pixabay.com/video/2024/03/08/203402-921381906_tiny.jpg" alt="">
+                    <p>Paris</p>
+                </div>
+                
+                <div class="item">
+                    <img src="https://i.namu.wiki/i/FSR4n3YCckQir4wvbDkbDrUj6i_P3_5tA9ct53KCPGyWqf_0CDd4J1IWg5G94rV_6j9niudW4hO_b3ck46PiLg.webp" alt="">
+                    <p>Madrid</p>
+                </div>
+
+                <div class="item">
+                    <img src="https://static.barcelo.com/content/dam/bpt/posts/2021/9/stopover-in-dubai_layover-in-dubai-1.jpg" alt="">
+                    <p>Dubai</p>
+                </div>
+
+                <div class="item">
+                    <img src="https://i.pinimg.com/originals/b9/83/6b/b9836b8d84be73dac0dcf4f0a0f11c3e.png" alt="">
+                    <p>Rome</p>
+                </div>
+
+                <div class="item">
+                    <img src="https://watermark.lovepik.com/photo/20211207/large/lovepik-european-famous-tourist-city-barcelona-spain-picture_501550770.jpg" alt="">
+                    <p>Barcelona</p>
+                </div>
+
+                <div class="item">
+                    <img src="https://img1.daumcdn.net/thumb/R1280x0.fjpg/?fname=http://t1.daumcdn.net/brunch/service/user/wlQ/image/XfAA4VUP6M8D2U4DJxx7xk2uaOk.JPG" alt="">
+                    <p>Shanghai</p>
+                </div>
+
+                <div class="item">
+                    <img src="https://i.namu.wiki/i/EIgHt7KtnBMFRY7rJf_fvqGVIR6EzI2Ck9-9mmRmQPtv8z1CuPGupCfreoNznKP1lrgJn1n7REi4CZ89gIQFQQ.webp" alt="">
+                    <p>Pyongyang</p>
+                </div>
+
+                <div class="item">
+                    <img src="https://www.gousa.or.kr/sites/default/files/styles/hero_l/public/images/hero_media_image/2016-10/a6473351eb9f2c424d969c50aad74661.jpeg?h=9c2070a3&itok=AQ1qhgbC" alt="">
+                    <p>Washington</p>
+                </div>
+            
+
+                <div class="item">
+                    <img src="https://www.gousa.or.kr/sites/default/files/styles/hero_l/public/images/hero_media_image/2017-05/4d7634a47020ece041aca08bd0c354fa.jpeg?h=64cea1ef&itok=UjFHPA1V" alt="">
+                    <p>Texas</p>
+                </div>
+
+            </div>
+        </nav>
+    </main>
+
+    <script>
+        const api_key = 'e12b8f780a6be124be04a9b77b2383bb'
+
+        let nav = document.querySelector('nav')
+        let input = document.querySelector('input')
+        let info_box = document.querySelector('.info_box')
+
+        let flag = document.querySelector('#flag')
+        let country_text = document.querySelector('#country_text');
+        let lon_text = document.querySelector('#lon_text');
+        let lat_text = document.querySelector('#lat_text');
+
+        let temp_text = document.querySelector('#temp_text');
+        let main_temp_text = document.querySelector('#main_temp_text')
+        
+        let feels_temp_text = document.querySelector('#feels_text');
+        let main_feels_text = document.querySelector('#main_feels_text');
+        
+        let max_temp_text = document.querySelector('#max_temp_text');
+        let min_temp_text = document.querySelector('#min_temp_text');
+        let main_max_text = document.querySelector('#main_max_text');
+        let main_min_text = document.querySelector('#main_min_text');
+        let pressure_text = document.querySelector('#pressure_text');
+        let humidity_text = document.querySelector('#humidity_text');
+
+        let wind_speed_text = document.querySelector('#wind_speed_text');
+        let main_wind_speed_text = document.querySelector('#main_wind_speed_text');
+        let wind_deg_text = document.querySelector('#wind_deg_text');
+
+        let sunrise_text = document.querySelector('#sunrise_text');
+        let sunset_text = document.querySelector('#sunset_text');
+
+        let city_text = document.querySelector('#city_text')
+        let weatherImg = document.querySelector('#weatherImg')
+        let main_city_img = document.querySelector('#main_city_img')
+
+        let feels = document.querySelector('#feels');
+        let Max = document.querySelector('#Max')
+        let Min = document.querySelector('#Min')
+
+        axios.get(`https://api.openweathermap.org/data/2.5/weather?q=Tokyo&appid=${api_key}`)
+                .then(function (response) {
+                    console.log(response.data.sys.country)
+                    axios.get(`http://apis.data.go.kr/1262000/CountryFlagService2/getCountryFlagList2?serviceKey=1oqS8oZ%2BbCZjfuUwgC2PZ30Y7loXN9ZI%2Ff2aS2LyF0ZTh6jsCf7yzUmdWfq2ADrwi%2BZo87BqmOfPpJ9subOLfw%3D%3D&returnType=JSON&cond[country_iso_alp2::EQ]=${response.data.sys.country}`)
+                    .then(function (response2) {
+                        country_text.textContent = response2.data.data[0].country_nm
+                        console.log((response.data.sys.country).toLowerCase())
+                        flag.src = `https://flagcdn.com/h240/${(response.data.sys.country).toLowerCase()}.png`
+                        console.log(response2.data.data)
+                    })
+                    lon_text.textContent = response.data.coord.lon
+                    lat_text.textContent = response.data.coord.lat
+
+                    info_box.style.backgroundColor = 'rgba(40, 38, 38, 0.418)'
+                    feels.style.backgroundColor = '#181818b9'
+                    Max.style.backgroundColor = '#181818b9'
+                    Min.style.backgroundColor = '#181818b9'
+
+                    city_text.textContent = response.data.name
+                    weatherImg.src = `http://openweathermap.org/img/wn/${response.data.weather[0].icon}@2x.png`
+                    main_temp_text.textContent = (response.data.main.temp-273.15).toFixed(2)
+                    main_feels_text.textContent = (response.data.main.feels_like-273.15).toFixed(2)
+                    main_max_text.textContent = (response.data.main.temp_max-273.15).toFixed(2)
+                    main_min_text.textContent = (response.data.main.temp_min-273.15).toFixed(2)
+
+                    temp_text.textContent = (response.data.main.temp-273.15).toFixed(2)
+                    feels_text.textContent = (response.data.main.feels_like-273.15).toFixed(2)
+                    max_temp_text.textContent = (response.data.main.temp_max-273.15).toFixed(2)
+                    min_temp_text.textContent = (response.data.main.temp_min-273.15).toFixed(2)
+                    pressure_text.textContent = (response.data.main.pressure)
+                    humidity_text.textContent = (response.data.main.humidity)
+
+                    wind_speed_text.textContent = (response.data.wind.speed)
+                    deg = response.data.wind.deg
+                    deg_list = ['N','NbE','NNE','NEbN','NE','NEbE','ENE','EbN','E','EbS','ESE','SEbE','SE','SEbS','SSE','SbE','S','SbW','SSW','SWbS','SW','SWbW','WSW','WbS','W','WbN','WNW','NWbW','NW','NWbN','NNW','NbW']
+                    wind_deg_text.textContent = deg_list[Math.round(deg/10.90909090909091)-1]
+
+                    sunrise_text.textContent = new Date((response.data.sys.sunrise)*1000).toLocaleString("ko-KR");
+                    sunset_text.textContent = new Date((response.data.sys.sunset)*1000).toLocaleString("ko-KR");
+                })
+            
+        nav.addEventListener('click', (e) => {
+            if (e.target.tagName == 'P') {
+                console.log(e.target.innerText)
+                axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${e.target.innerText}&appid=${api_key}`)
+                .then(function (response) {
+                    console.log(response.data.sys.country)
+                    axios.get(`http://apis.data.go.kr/1262000/CountryFlagService2/getCountryFlagList2?serviceKey=1oqS8oZ%2BbCZjfuUwgC2PZ30Y7loXN9ZI%2Ff2aS2LyF0ZTh6jsCf7yzUmdWfq2ADrwi%2BZo87BqmOfPpJ9subOLfw%3D%3D&returnType=JSON&cond[country_iso_alp2::EQ]=${response.data.sys.country}`)
+                    .then(function (response2) {
+                        country_text.textContent = response2.data.data[0].country_nm
+                        console.log((response.data.sys.country).toLowerCase())
+                        flag.src = `https://flagcdn.com/h240/${(response.data.sys.country).toLowerCase()}.png`
+                        console.log(response2.data.data)
+                    })
+                    lon_text.textContent = response.data.coord.lon
+                    lat_text.textContent = response.data.coord.lat
+
+                    info_box.style.backgroundColor = 'rgba(40, 38, 38, 0.418)'
+                    feels.style.backgroundColor = '#181818b9'
+                    Max.style.backgroundColor = '#181818b9'
+                    Min.style.backgroundColor = '#181818b9'
+                    main_city_img.src = e.target.previousSibling.previousSibling.currentSrc
+                    city_text.textContent = response.data.name
+                    weatherImg.src = `http://openweathermap.org/img/wn/${response.data.weather[0].icon}@2x.png`
+                    main_temp_text.textContent = (response.data.main.temp-273.15).toFixed(2)
+                    main_feels_text.textContent = (response.data.main.feels_like-273.15).toFixed(2)
+                    main_max_text.textContent = (response.data.main.temp_max-273.15).toFixed(2)
+                    main_min_text.textContent = (response.data.main.temp_min-273.15).toFixed(2)
+
+                    temp_text.textContent = (response.data.main.temp-273.15).toFixed(2)
+                    feels_text.textContent = (response.data.main.feels_like-273.15).toFixed(2)
+                    max_temp_text.textContent = (response.data.main.temp_max-273.15).toFixed(2)
+                    min_temp_text.textContent = (response.data.main.temp_min-273.15).toFixed(2)
+                    pressure_text.textContent = (response.data.main.pressure)
+                    humidity_text.textContent = (response.data.main.humidity)
+
+                    wind_speed_text.textContent = (response.data.wind.speed)
+                    deg = response.data.wind.deg
+                    deg_list = ['N','NbE','NNE','NEbN','NE','NEbE','ENE','EbN','E','EbS','ESE','SEbE','SE','SEbS','SSE','SbE','S','SbW','SSW','SWbS','SW','SWbW','WSW','WbS','W','WbN','WNW','NWbW','NW','NWbN','NNW','NbW']
+                    wind_deg_text.textContent = deg_list[Math.round(deg/10.90909090909091)-1]
+                    console.log(new Date((response.data.sys.sunrise)*1000).toLocaleString("ko-KR"))
+
+                    sunrise_text.textContent = new Date((response.data.sys.sunrise)*1000).toLocaleString("ko-KR");
+                    sunset_text.textContent = new Date((response.data.sys.sunset)*1000).toLocaleString("ko-KR");
+                })
+            }
+        })
+
+        document.addEventListener('keydown', (e) => {
+            console.log(e)
+            if (e.key == 'Enter') {
+                axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${input.value}&appid=${api_key}`)
+                .then(function (response) {
+                    console.log(response.data)
+                    console.log(response.data.sys.country)
+
+                    if ((response.data.sys.country).toLowerCase() == 'kp') {
+                        country_text.textContent = '조선인민공화국'
+                        flag.src = `https://flagcdn.com/h240/kp.png`
+                    } else {
+                        axios.get(`http://apis.data.go.kr/1262000/CountryFlagService2/getCountryFlagList2?serviceKey=1oqS8oZ%2BbCZjfuUwgC2PZ30Y7loXN9ZI%2Ff2aS2LyF0ZTh6jsCf7yzUmdWfq2ADrwi%2BZo87BqmOfPpJ9subOLfw%3D%3D&returnType=JSON&cond[country_iso_alp2::EQ]=${response.data.sys.country}`)
+                            .then(function (response2) {
+                                country_text.textContent = response2.data.data[0].country_nm
+                                console.log((response.data.sys.country).toLowerCase())
+                                flag.src = `https://flagcdn.com/h240/${(response.data.sys.country).toLowerCase()}.png`
+                                console.log(response2.data.data)
+                            })
+                    }
+                    
+                    lon_text.textContent = response.data.coord.lon
+                    lat_text.textContent = response.data.coord.lat
+
+                    main_city_img.src = ` `
+                    info_box.style.backgroundColor = '#181818'
+                    feels.style.backgroundColor = '#363636'
+                    Max.style.backgroundColor = '#363636'
+                    Min.style.backgroundColor = '#363636'
+                    city_text.textContent = response.data.name
+                    weatherImg.src = `http://openweathermap.org/img/wn/${response.data.weather[0].icon}@2x.png`
+                    main_temp_text.textContent = (response.data.main.temp-273.15).toFixed(2)
+                    main_feels_text.textContent = (response.data.main.feels_like-273.15).toFixed(2)
+                    main_max_text.textContent = (response.data.main.temp_max-273.15).toFixed(2)
+                    main_min_text.textContent = (response.data.main.temp_min-273.15).toFixed(2)
+
+                    temp_text.textContent = (response.data.main.temp-273.15).toFixed(2)
+                    feels_text.textContent = (response.data.main.feels_like-273.15).toFixed(2)
+                    max_temp_text.textContent = (response.data.main.temp_max-273.15).toFixed(2)
+                    min_temp_text.textContent = (response.data.main.temp_min-273.15).toFixed(2)
+                    pressure_text.textContent = (response.data.main.pressure)
+                    humidity_text.textContent = (response.data.main.humidity)
+
+                    wind_speed_text.textContent = (response.data.wind.speed)
+                    deg = response.data.wind.deg
+                    deg_list = ['N','NbE','NNE','NEbN','NE','NEbE','ENE','EbN','E','EbS','ESE','SEbE','SE','SEbS','SSE','SbE','S','SbW','SSW','SWbS','SW','SWbW','WSW','WbS','W','WbN','WNW','NWbW','NW','NWbN','NNW','NbW']
+                    wind_deg_text.textContent = deg_list[Math.round(deg/10.90909090909091)-1]
+
+                    sunrise_text.textContent = new Date((response.data.sys.sunrise)*1000).toLocaleString("ko-KR");
+                    sunset_text.textContent = new Date((response.data.sys.sunset)*1000).toLocaleString("ko-KR");
+                    input.value = ''
+                })
+            }
+        })
+    </script>
+</body>
+</html>
