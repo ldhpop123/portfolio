@@ -44,7 +44,7 @@
   --bs-dark: #212529;
   --bs-black: #000;
   --bs-white: #fff;
-  --bs-primary-rgb: 100, 161, 157;
+  --bs-primary-rgb: 250, 96, 91;
   --bs-secondary-rgb: 116, 100, 161;
   --bs-success-rgb: 103, 194, 156;
   --bs-info-rgb: 28, 171, 196;
@@ -55,6 +55,8 @@
   --bs-black-rgb: 0, 0, 0;
   --bs-white-rgb: 255, 255, 255;
   --bs-white-rgb: 255, 255, 255;
+  --bs-ED4672-rgb: 237, 70, 114;
+  --bs-FF7C15-rgb: 255, 124, 21;
   --bs-black-rgb: 0, 0, 0;
   --bs-body-color-rgb: 33, 37, 41;
   --bs-body-bg-rgb: 255, 255, 255;
@@ -77,8 +79,8 @@
   --bs-border-radius-xl: 1rem;
   --bs-border-radius-2xl: 2rem;
   --bs-border-radius-pill: 50rem;
-  --bs-link-color: #64a19d;
-  --bs-link-hover-color: #50817e;
+  --bs-link-color: #fa605bc8;
+  --bs-link-hover-color: #fa605b;
   --bs-code-color: #d63384;
   --bs-highlight-bg: #faf4e0;
 }
@@ -110,7 +112,7 @@ body {
 
 hr {
   margin: 1rem 0;
-  color: inherit;
+  color: #fa605b;
   border: 0;
   border-top: 1px solid;
   opacity: 0.25;
@@ -2849,10 +2851,10 @@ textarea.form-control-lg {
 
 .btn-primary {
   --bs-btn-color: #fff;
-  --bs-btn-bg: #64a19d;
+  --bs-btn-bg: #fa605bcf;
   --bs-btn-border-color: #64a19d;
   --bs-btn-hover-color: #fff;
-  --bs-btn-hover-bg: #558985;
+  --bs-btn-hover-bg: #fa605b;
   --bs-btn-hover-border-color: #50817e;
   --bs-btn-focus-shadow-rgb: 123, 175, 172;
   --bs-btn-active-color: #fff;
@@ -8181,8 +8183,9 @@ textarea.form-control-lg {
 
 /* rtl:end:remove */
 .text-primary {
-  --bs-text-opacity: 1;
+  --bs-text-opacity: 0.8;
   color: rgba(var(--bs-primary-rgb), var(--bs-text-opacity)) !important;
+  color: #fa605b;
 }
 
 .text-secondary {
@@ -8241,6 +8244,11 @@ textarea.form-control-lg {
 }
 
 .text-black-50 {
+  --bs-text-opacity: 1;
+  color: rgba(250, 96, 91, 0.8) !important;
+}
+
+.text-gray-50 {
   --bs-text-opacity: 1;
   color: rgba(0, 0, 0, 0.5) !important;
 }
@@ -8320,6 +8328,17 @@ textarea.form-control-lg {
   --bs-bg-opacity: 1;
   background-color: rgba(var(--bs-white-rgb), var(--bs-bg-opacity)) !important;
 }
+
+.bg-ED4672 {
+  background: rgb(237,70,114);
+  background: linear-gradient(45deg, rgba(255,124,21,1) 0%, rgba(237,70,114,1) 100%);
+}
+
+.bg-FF7C15 {
+  background: rgb(237,70,114);
+  background: linear-gradient(45deg, rgba(237,70,114,1) 0%, rgba(255,124,21,1) 100%);
+}
+
 
 .bg-body {
   --bs-bg-opacity: 1;
@@ -11069,7 +11088,7 @@ body {
   height: auto;
   min-height: 35rem;
   padding: 15rem 0;
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.7) 75%, #000 100%), url("../assets/img/bg-masthead.jpg");
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.7) 75%, #000 100%), url("../assets/img/bg/bg-masthead.jpg");
   background-position: center;
   background-repeat: no-repeat;
   background-attachment: scroll;
@@ -11141,7 +11160,7 @@ body {
   }
 }
 
-.signup-section {
+/* .signup-section {
   padding: 10rem 0;
   background: linear-gradient(to bottom, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.5) 75%, #000 100%), url("../assets/img/bg-signup.jpg");
   background-position: center;
@@ -11158,14 +11177,19 @@ body {
   text-transform: uppercase;
   letter-spacing: 0.15rem;
   border: 0;
-}
+} */
 
 .contact-section {
   padding-top: 5rem;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.1) 75%, #000 100%), url("../assets/img/bg-contact.jpg");
+  background-position:top ;
+  background-repeat: no-repeat;
+  background-attachment: scroll;
+  background-size: cover;
 }
 .contact-section .card {
   border: 0;
-  border-bottom: 0.25rem solid #64a19d;
+  border-bottom: 0.25rem solid #fa605b;
 }
 .contact-section .card h4, .contact-section .card .h4 {
   font-size: 0.8rem;
@@ -11175,7 +11199,7 @@ body {
 }
 .contact-section .card hr {
   opacity: 1;
-  border-color: #64a19d;
+  border-color: #fa605b;
   border-width: 0.25rem;
   width: 3rem;
 }
@@ -11200,4 +11224,8 @@ body {
 
 .footer {
   padding: 5rem 0;
+}
+
+.img-box > img {
+  width: 100px; height: 100px;
 }
