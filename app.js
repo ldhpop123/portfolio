@@ -12,7 +12,7 @@ const pageRouter = require('./routes/page');
 // express 애플리케이션 생성
 const app = express();
 
-app.set('port', process.env.PORT || 8003);
+app.set('port', process.env.PORT || 8001);
 app.set('view engine', 'html');
 
 // 넌적스
