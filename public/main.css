@@ -2852,18 +2852,18 @@ textarea.form-control-lg {
 .btn-primary {
   --bs-btn-color: #fff;
   --bs-btn-bg: #fa605bcf;
-  --bs-btn-border-color: #64a19d;
+  --bs-btn-border-color: #fa605b;
   --bs-btn-hover-color: #fff;
   --bs-btn-hover-bg: #fa605b;
-  --bs-btn-hover-border-color: #50817e;
-  --bs-btn-focus-shadow-rgb: 123, 175, 172;
+  --bs-btn-hover-border-color: #fa605b;
+  --bs-btn-focus-shadow-rgb: 250,	96,	91;
   --bs-btn-active-color: #fff;
-  --bs-btn-active-bg: #50817e;
-  --bs-btn-active-border-color: #4b7976;
+  --bs-btn-active-bg: #fa605b;
+  --bs-btn-active-border-color: #fa605b;
   --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
   --bs-btn-disabled-color: #fff;
-  --bs-btn-disabled-bg: #64a19d;
-  --bs-btn-disabled-border-color: #64a19d;
+  --bs-btn-disabled-bg: #fa605b;
+  --bs-btn-disabled-border-color: #fa605b;
 }
 
 .btn-secondary {
@@ -3037,19 +3037,19 @@ textarea.form-control-lg {
 }
 
 .btn-outline-secondary {
-  --bs-btn-color: #7464a1;
-  --bs-btn-border-color: #7464a1;
+  --bs-btn-color: #fa605b;
+  --bs-btn-border-color: #fff;
   --bs-btn-hover-color: #fff;
-  --bs-btn-hover-bg: #7464a1;
-  --bs-btn-hover-border-color: #7464a1;
-  --bs-btn-focus-shadow-rgb: 116, 100, 161;
+  --bs-btn-hover-bg: #fa605b;
+  --bs-btn-hover-border-color: #fa605b;
+  --bs-btn-focus-shadow-rgb: 250,	96,	91;
   --bs-btn-active-color: #fff;
-  --bs-btn-active-bg: #7464a1;
-  --bs-btn-active-border-color: #7464a1;
+  --bs-btn-active-bg: #fa605b;
+  --bs-btn-active-border-color: #fa605b;
   --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
-  --bs-btn-disabled-color: #7464a1;
+  --bs-btn-disabled-color: #fa605b;
   --bs-btn-disabled-bg: transparent;
-  --bs-btn-disabled-border-color: #7464a1;
+  --bs-btn-disabled-border-color: #fa605b;
   --bs-gradient: none;
 }
 
@@ -3684,7 +3684,7 @@ textarea.form-control-lg {
   --bs-nav-link-font-weight: ;
   --bs-nav-link-color: var(--bs-link-color);
   --bs-nav-link-hover-color: var(--bs-link-hover-color);
-  --bs-nav-link-disabled-color: #6c757d;
+  --bs-nav-link-disabled-color: #fa605b;
   display: flex;
   flex-wrap: wrap;
   padding-left: 0;
@@ -11060,15 +11060,15 @@ body {
     border-bottom: 0.25rem solid transparent;
   }
   #mainNav.navbar-shrink .nav-link:hover {
-    color: #64a19d;
+    color: #fa605bc8;
   }
   #mainNav.navbar-shrink .nav-link:active {
-    color: #467370;
+    color: #fa605bc8;
   }
   #mainNav.navbar-shrink .nav-link.active {
-    color: #64a19d;
+    color:  #fa605bc8;
     outline: none;
-    border-bottom: 0.25rem solid #64a19d;
+    border-bottom: 0.25rem solid #fa605bc8;
   }
 }
 
