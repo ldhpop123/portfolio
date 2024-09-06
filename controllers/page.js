@@ -24,3 +24,12 @@ exports.renderMusic = async (req, res, next) => {
         next(err)
     }
 }
+
+exports.renderTodo = async (req, res, next) => {
+    try {
+        res.render('todo');
+    } catch (err) {
+        console.log(err);
+        next(err)
+    }
+}
